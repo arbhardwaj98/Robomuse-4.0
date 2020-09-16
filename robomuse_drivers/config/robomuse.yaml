@@ -1,0 +1,12 @@
+wheel_radius: 0.0635 # m
+base_width: 0.585 #0.5675 # m
+counts_per_rev: 8192.0
+encoder_on_motor_shaft: 0 # 0 is false and 1 is true
+
+control_rate: [50]
+encoder_rate: [50]
+pwm_range: [750]
+no_cmd_timeout: [1]
+publish_tf: true
+odom:
+  base_frame_id: base_footprint

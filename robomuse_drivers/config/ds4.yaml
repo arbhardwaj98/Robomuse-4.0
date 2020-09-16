@@ -1,0 +1,9 @@
+axis_linear: 1 # Left Analog Vertical
+scale_linear: 0.5
+scale_linear_turbo: 1.0
+
+axis_angular: 2 # Right Analog Horizontal
+scale_angular: 0.5
+
+enable_button: 4  # L1 shoulder button
+enable_turbo_button: 5  # R1 shoulder button

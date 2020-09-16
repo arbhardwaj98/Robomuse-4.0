@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="camera" default="camera"/>
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="global_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="local_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/local_costmap.yaml" />
+    <rosparam file="$(find robomuse_drivers)/param/global_costmap.yaml" />
+    <rosparam file="$(find robomuse_drivers)/param/base_local_planner.yaml" />
+    <param name="controller_frequency" value="10.0" />
+    <remap from="openni_points" to="/rtabmap/cloud_obstacles"/>
+    <remap from="cmd_vel" to="/robomuse/cmd_vel"/>
+    <!--remap from="move_base_simple/goal" to="/rtabmap/goal"/-->
+  </node>
+
+  <!-- RVIZ to view the visualization -->
+  <!-- <node name="RVIZ" pkg="rviz" type="rviz" args=" -d $(find robomuse_drivers)/param/youbot_nav.rviz" />  -->
+
+</launch>

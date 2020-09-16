@@ -1,0 +1,6 @@
+<launch>
+
+  <node pkg="robomuse_drivers" name="image_converter" type="feedRecord.py" output = "screen"/>
+  <node pkg="robomuse_drivers" name="encryptNode" type="encryptVid.py"/>
+
+</launch>

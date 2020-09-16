@@ -1,0 +1,6 @@
+ClearCostmapRecovery:
+  reset_distance: 0.0
+conservative_reset:
+  reset_distance: 0.0
+aggressive_reset:
+  reset_distance: 0.0

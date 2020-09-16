@@ -1,0 +1,11 @@
+<launch>
+  <node pkg="openni_tracker" type="openni_tracker" name="openni_tracker" output=
+"screen">
+    <param name="camera_frame_id" value="camera_link" />
+    <param name="tf_prefix" value="tracker" />
+  </node>
+  <node pkg ="robomuse_drivers" type="startTracking.py" name="tracking_node" output=
+"screen">
+  </node>
+
+</launch>

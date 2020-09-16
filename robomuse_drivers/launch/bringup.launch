@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+	<param name="/use_sim_time" value="false"/>
+	
+	<arg name="port" value="/dev/ttyACM0" />
+	
+	<group ns="robomuse">
+		<rosparam file="$(find robomuse_drivers)/config/robomuse.yaml" command="load"/>
+		<!-- ros_arduino_base -->
+		<node pkg="rosserial_python" type="serial_node.py" name="arduino_robomuse_controller" output="screen" respawn="true">
+			<param name="~port" value="$(arg port)" />
+			<param name="~baud" value="115200" />
+		</node> 
+		<node pkg="ros_arduino_base" type="ros_arduino_base_node" name="robomuse_driver" output="screen" respawn="false">
+			<rosparam file="$(find robomuse_drivers)/config/pid.yaml" command="load"/>
+		</node>
+	</group>
+	<!-- upoad URDF model to the parameter server-->  
+	<param name="robot_description" command="$(find xacro)/xacro $(find robomuse_description)/robots/robomuse.urdf.xacro" />
+	<!-- start robot_state_publisher -->
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	
+	<!-- <node name="rviz" pkg="rviz" type="rviz" /> -->
+
+	<!-- <node pkg="rqt_plot" type="rqt_plot" name="rqt_plot_x" args="/robomuse/cmd_vel/linear/x, /robomuse/odom/twist/twist/linear/x"/>
+	<node pkg="rqt_plot" type="rqt_plot" name="rqt_plot_w" args="/robomuse/cmd_vel/angular/z, /robomuse/odom/twist/twist/angular/z"/>
+	 <node pkg="rqt_plot" type="rqt_plot" name="rqt_plot_left" args="/robomuse/cmd_diff_vel/left, /robomuse/diff_vel/left"/>
+	<node pkg="rqt_plot" type="rqt_plot" name="rqt_plot_right" args="/robomuse/cmd_diff_vel/right, /robomuse/diff_vel/right"/> -->
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="robomuse_drivers" name="marker_creator" type="createmarkframe.py" output = "screen"/>
+  <node pkg="robomuse_drivers" name="kidnap_solver" type="kidnapsolve.cpp" output = "screen"/>
+  <node pkg="robomuse_drivers" name="visualpos" type="createvisualframe.py" output = "screen"/>
+  <node pkg="robomuse_drivers" name="loscheck" type="loscheck.py" output = "screen"/>
+  <node pkg="robomuse_drivers" name="vispub" type="vispospub.py" output = "screen"/>
+
+</launch>

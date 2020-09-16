@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find robomuse_drivers)/maps/LHC_Circle.yaml"/>
+   <!-- Fire up AMCL -->
+  <arg name="camera" default="camera"/>
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="global_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="local_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/local_costmap.yaml" />
+    <rosparam file="$(find robomuse_drivers)/param/global_costmap.yaml" />
+    <!--rosparam file="$(find robomuse_drivers)/param/dwaplanner.yaml" /-->
+    <rosparam file="$(find robomuse_drivers)/param/base_local_planner.yaml" />
+    <param name="controller_frequency" value="10.0" />
+    <remap from="openni_points" to="/rtabmap/cloud_obstacles"/>
+    <remap from="/rtabmap/grid_map" to="map"/>
+    <remap from="cmd_vel" to="/robomuse/cmd_vel"/>
+    <!--remap from="move_base_simple/goal" to="/rtabmap/goal"/-->
+  </node>
+  <node name="subcall" pkg="robomuse_drivers" type="subcall.py"/> 
+</launch>

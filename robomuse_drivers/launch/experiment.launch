@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="use_sim_time" value="false" />
+
+  <!--Start the Arduino controller -->
+  <include file="$(find robomuse_drivers)/launch/robomuse_depth_reg.launch"/>
+
+  <include file="$(find robomuse_drivers)/launch/robomuse_rtab.launch"/>
+
+
+
+  <!-- The move_base node -->
+   <launch>
+  <arg name="camera" default="camera"/>
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="global_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/costmap_common.yaml" ns="local_costmap" />
+    <rosparam file="$(find robomuse_drivers)/param/local_costmap.yaml" />
+    <rosparam file="$(find robomuse_drivers)/param/global_costmap.yaml" />
+    <rosparam file="$(find robomuse_drivers)/param/base_local_planner.yaml" />
+    <param name="controller_frequency" value="10.0" />
+    <remap from="openni_points" to="/rtabmap/cloud_obstacles"/>
+    <remap from="cmd_vel" to="/robomuse/cmd_vel"/>
+    <!--remap from="move_base_simple/goal" to="/rtabmap/goal"/-->
+  </node>
+
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find robomuse_drivers)/src/forexpt.yaml"/>
+   <!-- Fire up AMCL -->
+  <include file="$(find robomuse_drivers)/launch/robomuse_amcl.launch"/>
+
+  
+  <!-- Start the navigation test -->
+  
+</launch>
+
