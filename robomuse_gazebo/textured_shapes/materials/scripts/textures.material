@@ -1,0 +1,14 @@
+material TexturedShape/APtag
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture model4.jpg
+      }
+    }
+  }
+}
+

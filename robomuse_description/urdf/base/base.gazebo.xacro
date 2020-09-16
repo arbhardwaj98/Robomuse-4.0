@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+	xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+	xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+	xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:macro name="robomuse_wheel_gazebo" params="suffix">
+		<gazebo reference="${suffix}_wheel_link">
+			<mu1 value="0.5" />
+			<mu2 value="0.5" />
+			<kp  value="1000000.0" />
+			<kd  value="1.0" />
+			<maxVel  value="100.0" />
+			<minDepth  value="0.0" />
+			<material>Gazebo/Orange</material>
+		</gazebo>
+	</xacro:macro>
+
+	<xacro:macro name="robomuse_caster_gazebo">
+		<gazebo reference="caster_link">
+			<mu1 value="0.5" />
+			<mu2 value="0.5" />
+			<kp  value="1.0" />
+			<kd  value="1.0" />
+			<maxVel  value="100.0" />
+			<minDepth  value="0.0" />
+			<material>Gazebo/Orange</material>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- position controller -->
+	<!--xacro:macro name="base_gazebo">
+		<gazebo>
+			<plugin name="base_controller" filename="libgazebo_ros_planar_move.so">
+				<commandTopic>robomuse/cmd_vel</commandTopic>
+				<odometryTopic>odom</odometryTopic>
+				<odometryFrame>odom</odometryFrame>
+				<odometryRate>100.0</odometryRate>
+				<robotBaseFrame>base_link</robotBaseFrame>
+			</plugin>
+		</gazebo>
+	</xacro:macro-->
+	
+	<xacro:macro name="diff_drive_gazebo">
+		<gazebo>
+	  		<plugin name="differential_drive_controller" 	filename="libgazebo_ros_diff_drive.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>10</updateRate>
+				<legacyMode>true</legacyMode>
+				<robotNamespace>/robomuse</robotNamespace>
+				<leftJoint>l_wheel_joint</leftJoint>
+				<rightJoint>r_wheel_joint</rightJoint>
+				<wheelSeparation>0.56</wheelSeparation>
+			    <wheelDiameter>0.127</wheelDiameter>
+			    <torque>20</torque>
+			    <commandTopic>/robomuse/cmd_vel</commandTopic>
+			    <odometryTopic>/robomuse/odom</odometryTopic>
+			    <odometryFrame>/robomuse/odom</odometryFrame>
+			    <robotBaseFrame>base_footprint</robotBaseFrame>
+			</plugin>
+			
+			<plugin name="p3d_base_pose" filename="libgazebo_ros_p3d.so">
+				<robotNamespace>/robomuse</robotNamespace>
+				<updateRate>10.0</updateRate>
+				<bodyName>base_link</bodyName>
+				<topicName>base_pose_ground_truth</topicName>
+				<frameName>world</frameName>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+</robot>

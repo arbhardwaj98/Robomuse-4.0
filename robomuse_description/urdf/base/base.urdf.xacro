@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="base">
+
+ <xacro:include filename="$(find robomuse_description)/urdf/base/base.gazebo.xacro"/> 
+ <xacro:include filename="$(find robomuse_description)/urdf/base/base.transmission.xacro"/>
+
+ <xacro:property name="M_PI" value="3.1415926535897931" />
+
+ <xacro:property name="caster_offset_x" value="0.267"/>
+ <xacro:property name="caster_offset_z" value="-0.018"/>
+ 
+ <xacro:property name="caster_mass" value="3.124"/>
+ <xacro:property name="caster_radius" value="0.05"/>
+ <xacro:property name="caster_length" value="0.005"/>
+
+ <xacro:property name="wheel_offset_x" value="-0.095"/>
+ <xacro:property name="wheel_offset_y" value="0.28"/>
+ <xacro:property name="wheel_offset_z" value="-0.003"/>
+
+ <xacro:property name="wheel_mass" value="0.464"/>
+ <xacro:property name="wheel_radius" value="0.0635"/>
+ <xacro:property name="wheel_length" value="0.03"/>
+
+ <xacro:property name="base_cg_x" value="-0.061" />
+ <xacro:property name="base_cg_y" value="0.0" />
+ <xacro:property name="base_cg_z" value="${0.5*0.293}" />
+ <xacro:property name="base_mass" value="10.450"/>
+
+ <!-- simplified box collision geometry for base -->
+ <xacro:property name="base_size_x" value="1.6936"/>
+ <xacro:property name="base_size_y" value="1.2008"/>
+ <xacro:property name="base_size_z" value="0.005"/>
+ <xacro:property name="base_collision_size_z" value="0.04" />
+
+ <!--                                                      -->
+ <!--           wheel                                      -->
+ <!--                                                      -->
+ <xacro:macro name="robomuse_wheel" params="suffix parent reflect">
+  <joint name="${suffix}_wheel_joint" type="continuous">
+    <axis xyz="0 1 0" />
+    <limit effort="7" velocity="15"/> <!-- alpha tested effort and velocity limits -->
+    <safety_controller  k_velocity="10" />
+    <dynamics damping="1.0" friction="0.0" />
+    <origin xyz="${wheel_offset_x} ${reflect*wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0" />
+    <parent link="${parent}"/>
+    <child link="${suffix}_wheel_link"/>
+  </joint>
+  <link name="${suffix}_wheel_link">
+    <inertial>
+      <mass value="${wheel_mass}" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="6297467.79E-9" ixy="1251976.18E-9" ixz="1508757.76E-9"
+               iyy="5039322.53E-9" iyz="2842262.41E-9" izz="3536851.48E-9" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/wheel.stl" />
+      </geometry>
+      
+      <material name="Black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" /> <!-- rotation because cyl. geom primitive has symmetry axis in +x direction -->
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- extensions -->
+  <xacro:robomuse_wheel_gazebo suffix="${suffix}" />
+  <xacro:robomuse_wheel_transmission suffix="${suffix}" />
+
+ </xacro:macro>
+
+<xacro:macro name="robomuse_caster" params="parent">
+  <joint name="caster_joint" type="continuous">
+    <axis xyz="0 1 0" />
+    <limit effort="7" velocity="15"/> <!-- alpha tested effort and velocity limits -->
+    <safety_controller  k_velocity="10" />
+    <dynamics damping="1.0" friction="0.0" />
+    <origin xyz="${caster_offset_x} 0 ${caster_offset_z}" rpy="0 0 0" />
+    <parent link="${parent}"/>
+    <child link="caster_link"/>
+  </joint>
+  <link name="caster_link">
+    <inertial>
+      <mass value="${caster_mass}" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="1282204E-9" ixy="230344E-9" ixz="324735.29E-9"
+               iyy="1013926.06E-9" iyz="564890.11E-9" izz="687090.72E-9" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/caster.stl" />
+      </geometry>
+      
+      <material name="White" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" /> <!-- rotation because cyl. geom primitive has symmetry axis in +x direction -->
+      <geometry>
+        <cylinder radius="${caster_radius}" length="${caster_length}" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- extensions -->
+  <!--xacro:robomuse_caster_gazebo /-->
+  <!--xacro:robomuse_caster_transmission /-->
+
+ </xacro:macro>
+
+ <xacro:macro name="robomuse_base" params="name">
+  <link name="${name}_link">
+    <inertial>
+      <mass value="${base_mass}"/>
+      <origin xyz="${base_cg_x} ${base_cg_y} ${base_cg_z}" />
+      <inertia ixx="14500137862.90E-9" ixy="2947835909.49E-9" ixz="4248517713.49E-9" 
+               iyy="11930164319.34E-9" iyz="6575128544.42E-9" izz="6936045123.05E-9" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/base2.stl" /> 
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_size_x/2.0} ${base_size_y/2.0} ${base_size_z}" />
+      </geometry>
+    </collision>
+  </link>
+
+      <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin,
+      navigation stack dedpends on this frame -->
+  <link name="${name}_footprint">
+  </link>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 0.07" rpy="0 0 0"/>
+    <child link="${name}_link"/>
+    <parent link="${name}_footprint"/>
+  </joint>
+
+  <xacro:robomuse_caster parent="${name}_link"/>
+
+  <xacro:robomuse_wheel suffix="l" parent="${name}_link" reflect="1.0"/>
+  <xacro:robomuse_wheel suffix="r" parent="${name}_link" reflect="-1.0"/>  
+
+  <xacro:diff_drive_gazebo/>
+</xacro:macro>
+</robot>

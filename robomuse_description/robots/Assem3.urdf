@@ -1,0 +1,246 @@
+<robot
+  name="Assem3">
+  
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0173703637765719 -0.083972658884426 0.0219928161189121"
+        rpy="0 0 0" />
+      <mass
+        value="3.08355733081114" />
+      <inertia
+        ixx="0.0381106319924521"
+        ixy="0.000185755842133526"
+        ixz="6.48593340914147E-05"
+        iyy="0.0373767392367536"
+        iyz="-0.00242534547465654"
+        izz="0.0736723009958129" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="rack">
+    <inertial>
+      <origin
+        xyz="0.0113468360138427 0.153672754023583 -0.596902035828217"
+        rpy="0 0 0" />
+      <mass
+        value="2.71058387968739" />
+      <inertia
+        ixx="0.0488757513758698"
+        ixy="-2.9062650587974E-12"
+        ixz="-4.41643255396988E-08"
+        iyy="0.0209897757175276"
+        iyz="2.96944354146145E-12"
+        izz="0.0343841550155248" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/rack.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/rack.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="fixed">
+    <origin
+      xyz="0.579240620443926 -0.23080485415115 0.125561022602631"
+      rpy="1.5707963267949 -6.12303176911189E-17 1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="rack" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="castor">
+    <inertial>
+      <origin
+        xyz="-8.10958706770615E-07 1.89768468713408E-07 0.0152499990049085"
+        rpy="0 0 0" />
+      <mass
+        value="0.124266885600902" />
+      <inertia
+        ixx="5.37193562572023E-05"
+        ixy="-3.25350678641941E-14"
+        ixz="2.00035805571769E-10"
+        iyy="5.37193561258658E-05"
+        iyz="8.54508970590813E-10"
+        izz="9.43751560322453E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/castor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/castor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="continuous">
+    <origin
+      xyz="-0.000465815074997711 0.135457979579817 -0.0312045648735022"
+      rpy="-1.5707963267949 -6.12303176911189E-17 1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="castor" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="wheel1">
+    <inertial>
+      <origin
+        xyz="0 -0.015875 4.02736480981103E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.399434057418048" />
+      <inertia
+        ixx="1.16422599155778E-12"
+        ixy="0"
+        ixz="-4.25083907545746E-25"
+        iyy="1.16422599155778E-12"
+        iyz="1.36026850415868E-23"
+        izz="1.88511407451511E-34" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/wheel_new.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/wheel_new.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3"
+    type="continuous">
+    <origin
+      xyz="-0.27973141538515 -0.224758018137308 -0.0152545648735021"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel1" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="wheel2">
+    <inertial>
+      <origin
+        xyz="1.89084858881472E-16 -0.0158750000000001 4.02736480972776E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.399434057418047" />
+      <inertia
+        ixx="1.16422599153058E-12"
+        ixy="0"
+        ixz="8.50167815076102E-25"
+        iyy="1.16422599153058E-12"
+        iyz="4.42441820199727E-40"
+        izz="1.20200314373361E-36" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/wheel_new.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robomuse_description/meshes/wheel_new.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4"
+    type="continuous">
+    <origin
+      xyz="0.248299785235154 -0.224758018137308 -0.0152545648735017"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel2" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+</robot>

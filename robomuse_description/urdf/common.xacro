@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find robomuse_description)/urdf/rack/rack.gazebo.xacro"/>
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="VELOCITY_LIMIT_SCALE" value="0.6" />
+
+  <!-- Kinect Camera Location (Nominally 0) -->
+  <xacro:property name="cal_kinect_x" value="0.0" />
+  <xacro:property name="cal_kinect_y" value="0.0" />
+  <xacro:property name="cal_kinect_z" value="0.0" />
+  <xacro:property name="cal_kinect_roll" value="0.0" />
+  <xacro:property name="cal_kinect_pitch" value="0.0" />
+  <xacro:property name="cal_kinect_yaw" value="0.0" />
+
+</robot>

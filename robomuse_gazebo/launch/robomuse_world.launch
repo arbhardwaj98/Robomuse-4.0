@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="world_name" default="$(find robomuse_gazebo)/worlds/ridgeback_race.world" />
+
+  <!-- Launch Gazebo with the specified world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+  <!-- <param name="robot_description" command="$(find xacro)/xacro inorder $(find robomuse_description)/robots/robomuse.urdf.xacro" /> -->
+  <!-- Load Robomuse's description, controllers, and teleop nodes. -->
+		<param name="robot_description" command="$(find xacro)/xacro --inorder $(find robomuse_description)/robots/robomuse_with_arm.xacro" />
+		<!-- Load joint controller configurations from YAML file to parameter server >
+		<rosparam file="$(find robomuse_control)/config/robomuse_control.yaml" command="load"/-->
+
+		<!-- load the controllers >
+		<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+	  	output="screen" ns="/robomuse" args="joint_state_controller
+	  					  left_wheel_position_controller
+	  					  right_wheel_position_controller"/-->
+
+		<!-- convert joint states to TF transforms for rviz, etc >
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+		  respawn="false" output="screen">
+		  <remap from="/joint_states" to="/robomuse/joint_states" />
+		</node-->
+
+		<include file="$(find robomuse_moveit_config)/launch/planning_execution.launch"/>
+		<!-- Load joints controllers configurations -->
+		<rosparam file="$(find robomuse_control)/config/control.yaml" command="load"/>
+
+		<!-- Load the controllers -->
+		<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+		      joint_state_controller
+		      arm_controller
+	  	gripper_controller"/>
+
+		<!-- convert joint states to TF transforms for rviz, etc -->
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	  	respawn="false" output="screen">
+		  <!--remap from="/joint_states" to="/robomuse/joint_states" /-->
+		</node>
+
+		<!--node name="move_bot" pkg="robomuse_gazebo" type="move_bot.py" output="screen"/-->
+		<!--Spawn Robomuse-->
+		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+		      args="-urdf -model robomuse_arm -param robot_description -x 0 -y 0 -z 0.2 -R 0 -P 0 -Y 0" />
+</launch>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot name="robomuse_arm" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- Import URDF xacro model -->
+	<xacro:include filename="$(find phantomx_reactor_arm_description)/urdf/phantomx_reactor_wrist.urdf.xacro" />
+	<xacro:include filename="$(find robomuse_description)/robots/robomuse.urdf.xacro" />
+
+	<xacro:phantomx_reactor_wrist prefix="" parent="base_link">
+		<origin xyz="0.35 0 0.05" rpy="0 0 0" />
+	</xacro:phantomx_reactor_wrist>
+	<gazebo reference="base_footprint">
+		<selfCollide>true</selfCollide>
+	</gazebo>
+
+	<!--<joint name="phantom_to_base" type="fixed">
+        	<origin xyz="0 0 0" rpy="0 0 0"/>
+        	<parent link="base_link"/>
+        	<child link="arm_base_link"/>
+	</joint>-->
+	
+</robot>

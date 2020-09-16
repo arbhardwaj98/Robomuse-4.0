@@ -1,0 +1,23 @@
+<launch>
+
+  <!-- Load joints controllers configurations -->
+  <rosparam file="$(find robomuse_control)/config/control.yaml" command="load"/>
+
+  <!-- Load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+        joint_state_controller
+        arm_controller
+	      gripper_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <rosparam param="/source_list">[/joint_states]</rosparam>
+  </node-->
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+    <!--remap from="/joint_states" to="/robomuse/joint_states" /-->
+  </node>
+
+</launch>

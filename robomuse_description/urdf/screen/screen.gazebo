@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot>
+
+  <gazebo reference="display_screen_link">
+    <visual>
+      <plugin name="display_video_controller" filename="libgazebo_ros_video.so">
+        <topicName>image_topic</topicName>
+        <height>480</height>
+        <width>640</width>
+      </plugin>
+    </visual>
+  </gazebo>
+
+</robot>
