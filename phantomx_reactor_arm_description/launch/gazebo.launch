@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Launch Gazebo with the specified world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  </include>
+  <!-- <param name="robot_description" command="$(find xacro)/xacro inorder $(find robomuse_description)/robots/robomuse.urdf.xacro" /> -->
+
+  <!-- Load Robomuse's description, controllers, and teleop nodes. -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find phantomx_reactor_arm_description)/robots/phantomx_reactor_arm_wrist.urdf.xacro" />
+  <!-- Load joint controller configurations from YAML file to parameter server
+  <rosparam file="$(find robomuse_control)/config/robomuse_control.yaml" command="load"/>-->
+
+
+
+  <!--Spawn Robomuse--> 
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -model phantomx_reactor_arm -param robot_description -x 0 -y 0 -z 0.2 -R 0 -P 0 -Y 0" />
+</launch>

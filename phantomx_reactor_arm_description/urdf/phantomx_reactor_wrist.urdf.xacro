@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+<robot name="phantomx_reactor" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:property name="PI" value="3.141593"/>
+	<xacro:property name="shoulder_yaw_joint_upper_limit" value="${PI}"/>
+	<xacro:property name="shoulder_yaw_joint_lower_limit" value="-${PI}"/>
+	
+	<xacro:property name="shoulder_pitch_joint_upper_limit" value="${PI/2}"/>
+	<xacro:property name="shoulder_pitch_joint_lower_limit" value="-${PI/2}"/>
+	
+	<xacro:property name="elbow_pitch_joint_upper_limit" value="${PI/2}"/>
+	<xacro:property name="elbow_pitch_joint_lower_limit" value="-${PI/2}"/>
+	
+	<xacro:property name="wrist_pitch_upper_limit" value="1.9"/>
+	<xacro:property name="wrist_pitch_lower_limit" value="-1.7"/>
+	
+	<xacro:property name="wrist_roll_upper_limit" value="${PI}"/>
+	<xacro:property name="wrist_roll_lower_limit" value="-${PI}"/>
+	
+	<xacro:property name="gripper_joint_upper_limit" value="0.0"/>
+	<xacro:property name="gripper_joint_lower_limit" value="0.03"/>
+	
+	<xacro:include filename="$(find phantomx_reactor_arm_description)/urdf/phantomx_reactor_wrist.gazebo.xacro"/>
+	<xacro:macro name="phantomx_reactor_wrist" params="parent prefix *origin">
+		
+	    <!-- ARM BASE JOINT -->
+		<joint name="${prefix}base_joint" type="fixed">
+			<xacro:insert_block name="origin" />
+			<parent link="${parent}" />
+			<child link="arm_base_link" />
+		</joint>
+		
+		<link name="arm_base_link">
+			<inertial>
+			  <origin xyz="-3.9657E-09 2.0144E-09 0.04262" rpy="0 0 0" />
+			  <mass value="0.33742" />
+			  <inertia 	ixx="0.0011303" ixy="2.3398E-15" ixz="5.3844E-11" 
+						iyy="0.0011303" iyz="-2.735E-11" 
+						izz="0.0016747" />
+			</inertial>
+			<visual>
+			  <origin xyz="0 0 0" rpy="0 0 0" />
+			  <geometry>
+				<mesh filename="package://phantomx_reactor_arm_description/meshes/base_link.STL" />
+			  </geometry>
+			  <material name="">
+				<color rgba="0.25098 0.25098 0.25098 1" />
+			  </material>
+			</visual>
+			<collision>
+			  <origin xyz="0 0 0" rpy="0 0 0" />
+			  <geometry>
+				<mesh filename="package://phantomx_reactor_arm_description/meshes/base_link_hull.STL" />
+			  </geometry>
+			</collision>
+		</link>
+		
+		<!-- SHOULDER YAW -->
+		<joint name="${prefix}shoulder_yaw_joint" type="revolute">
+			<origin xyz="0 0 0.081" rpy="0 0 0" />
+			<!--origin xyz="0 0 0.081" rpy="0 0 0" /-->
+			<parent link="arm_base_link" />
+			<child link="${prefix}shoulder_link" />
+			<axis xyz="0 0 1" />
+			<dynamics friction="0.4"/>
+			<limit effort="1.5" velocity="6.178465545" lower="${shoulder_yaw_joint_lower_limit}" upper="${shoulder_yaw_joint_upper_limit}" />
+		</joint>
+		<link name="${prefix}shoulder_link">
+			<inertial>
+			  <origin xyz="5.5296E-07 0.00048339 0.0026355" rpy="0 0 0" />
+			  <mass value="0.069055" />
+			  <inertia ixx="7.786E-05" ixy="4.5909E-11" ixz="-6.4873E-11" iyy="4.1745E-05" iyz="2.8244E-07" izz="0.0001073" />
+			</inertial>
+			<visual>
+			  <origin xyz="0 0 0" rpy="0 0 0" />
+			  <geometry>
+				<mesh   filename="package://phantomx_reactor_arm_description/meshes/shoulder_link.STL" />
+			  </geometry>
+			  <material
+				name="">
+				<color   rgba="0.25098 0.25098 0.25098 1" />
+			  </material>
+			</visual>
+			<collision>
+			  <origin xyz="0 0 0" rpy="0 0 0" />
+			  <geometry>
+				<mesh   filename="package://phantomx_reactor_arm_description/meshes/shoulder_link_hull.STL" />
+			  </geometry>
+			</collision>
+		</link>
+		
+		<!-- SHOULDER PITCH -->
+		<joint name="${prefix}shoulder_pitch_joint" type="revolute">
+			<origin xyz="0 0 0.0265" rpy="${PI/2} 0 0" />
+			<parent link="${prefix}shoulder_link" />
+			<child link="${prefix}bicep_link" />
+			<axis xyz="0 0 -1" />
+			<dynamics friction="0.4"/>
+			<limit effort="3.0" velocity="6.178465545" lower="${shoulder_pitch_joint_lower_limit}" upper="${shoulder_pitch_joint_upper_limit}" />
+		</joint>	
+		<link name="${prefix}bicep_link">
+			<inertial>
+			  <origin xyz="-0.079312 0.00175 0.0073486" rpy="-${PI/2} 0 -${PI/2}" />
+			  <mass value="0.29331" />
+			  <inertia  ixx="0.00040741" ixy="-1.1578E-09" ixz="-0.00014106"
+						iyy="0.0010604" iyz="1.1578E-09"
+						izz="0.0012838" />
+			</inertial>
+			<visual>
+			  <origin xyz="0 0 0" rpy="-${PI/2} 0 -${PI/2}" />
+			  <geometry>
+				<mesh filename="package://phantomx_reactor_arm_description/meshes/bicep_link.STL" />
+			  </geometry>
+			  <material name="">
+				<color rgba="0.25098 0.25098 0.25098 1" />
+			  </material>
+			</visual>
+			<collision>
+			  <origin xyz="0 0 0" rpy="-${PI/2} 0 -${PI/2}" />
+			  <geometry>
+				<mesh filename="package://phantomx_reactor_arm_description/meshes/bicep_link_hull.STL" />
+			  </geometry>
+			</collision>
+		</link>
+	  
+	    <!-- ELBOW PITCH-->
+		<joint name="${prefix}elbow_pitch_joint" type="revolute"> 
+			<origin xyz="0.0385 0.1445 0" rpy="-${PI/2} 0 0" />
+			<parent link="${prefix}bicep_link" /> 
+			<child link="${prefix}forearm_link" /> 
+			<axis xyz="0 1 0" /> <limit effort="3.0" velocity="6.178465545" lower="${elbow_pitch_joint_lower_limit}" upper="${elbow_pitch_joint_upper_limit}" />
+			<dynamics friction="0.4"/>
+		</joint>
+
+		<link name="${prefix}forearm_link"> 
+			<inertial>
+				<origin xyz="0.0851888339312843 0.00136288621406396 -0.000141576344087929" rpy="0 0 0" />
+				<mass value="0.138705662443181" />   
+				<inertia 	ixx="9.73074886909647E-05" ixy="-2.7259894490049E-06" ixz="8.2757647661483E-07" 
+							iyy="0.000291190570207828" iyz="-7.99252279784603E-09" 
+							izz="0.000367301178753318" /> 
+			</inertial> 
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/forearm_link.STL" />
+				</geometry>
+				<material name=""> 
+					<color rgba="0.25098 0.25098 0.25098 1" />
+				</material> 
+			</visual> 
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/forearm_link_hull.STL" />
+				</geometry>
+			</collision>
+		</link>
+		
+		<!-- WRIST PITCH-->
+		<joint name="${prefix}wrist_pitch_joint" type="revolute"> 
+			<origin xyz="0.1535 0 0"   rpy="0 0 0" /> 
+			<parent link="${prefix}forearm_link" />
+			<child link="${prefix}wrist_1_link" /> 
+			<axis xyz="0 1 0" /> 
+			<dynamics friction="0.4"/>
+			<limit effort="1.5" velocity="6.178465545" lower="${wrist_pitch_lower_limit}" upper="${wrist_pitch_upper_limit}"/> 
+		</joint> 
+		<link name="${prefix}wrist_1_link"> 
+			<inertial>
+				<origin xyz="0.0426453655090486 0.0017494960392062 0.00984847105297723" rpy="0 0 0" />
+				<mass value="0.0605067986491363" />
+				<inertia 	ixx="1.78648656995261E-05" ixy="1.11621731933541E-10" ixz="3.58888722407994E-06" 
+							iyy="2.8352036542644E-05" iyz="-2.18072661043818E-10" 
+							izz="2.38673851634115E-05" />
+			</inertial> 
+			<visual>   
+				<origin xyz="0 0 0" rpy="0 0 0" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/wrist_1.STL" />
+				</geometry>   
+				<material name="">
+					<color rgba="0.25098 0.25098 0.25098 1" />   
+				</material> 
+			</visual> 
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/wrist_1_hull.STL" />
+				</geometry>
+			</collision>
+		</link> 
+	  
+		<!-- WRIST ROLL -->
+		<joint name="${prefix}wrist_roll_joint" type="revolute"> 
+			<origin xyz="0.071 0.00175 0" rpy="0 0 0" /> 
+			<parent link="${prefix}wrist_1_link" /> 
+			<child link="${prefix}wrist_2_link" /> 
+			<axis xyz="1 0 0" /> 
+			<dynamics friction="0.4"/>
+			<limit effort="1.5" velocity="6.178465545" lower="${wrist_roll_lower_limit}" upper="${wrist_roll_upper_limit}" /> 
+		</joint> 
+		<link name="${prefix}wrist_2_link"> 
+			<inertial>
+				<origin xyz="0.022349 -5.4754E-07 0.0089164" rpy="0 0 0" />   
+				<mass value="0.055706" />   
+				<inertia 	ixx="1.5957E-05" ixy="2.0952E-10" ixz="3.3629E-06" 
+							iyy="2.1196E-05" iyz="-2.4643E-10" 
+							izz="1.4482E-05" /> 
+			</inertial>
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/wrist_2.STL" />
+				</geometry>
+				<material name=""> 
+					<color rgba="0.25098 0.25098 0.25098 1" />
+				</material>
+			</visual>
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/wrist_2_hull.STL" />
+				</geometry>
+			</collision>
+		</link>
+		
+		<!-- GRIPPER -->
+		<joint name="${prefix}gripper_guide_joint" type="fixed"> 
+			<origin xyz="0.05 0.00 0"   rpy="0 0 0" /> 
+			<parent link="${prefix}wrist_2_link" /> 
+			<child link="${prefix}gripper_guide_link" /> 
+			<axis xyz="0 0 1" /> 
+			<dynamics friction="0.4"/>
+			<limit effort="1.5" velocity="6.178465545" lower="0" upper="1.57"/> 
+		</joint> 
+
+		<link name="${prefix}gripper_guide_link"> 
+			<inertial>
+				<origin xyz="0.0091884 -7.3309E-13 -3.4513E-05" rpy="0 0 0" />
+				<mass value="0.02487" />
+				<inertia ixx="1.5997E-05" ixy="1.6551E-16" ixz="8.3911E-09" iyy="7.3918E-06" iyz="-2.7145E-16" izz="1.5931E-05" /> 
+			</inertial> 
+			<visual>   
+				<origin xyz="0 0 0" rpy="1.57 3.14 1.57" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Guide_Rail_Fixed_Centered.stl" scale="0.01 0.01 0.01" />
+				</geometry>
+				<material name=""> 
+					<color rgba="0.25098 0.25098 0.25098 1" />
+				</material> 
+			</visual>
+			<collision>
+				<origin xyz="0 0 0" rpy="1.57 3.14 1.57" />
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Guide_Rail_Fixed_Centered.stl" scale="0.01 0.01 0.01" /> 
+				</geometry>
+			</collision> 
+		</link> 
+		<!--<joint name="${prefix}gripper_revolute_joint" type="revolute">
+			 <origin xyz = "0 0 0" rpy="0 ${PI/2} 0" />
+			 <parent link="${prefix}gripper_guide_link" />
+			 <child link="${prefix}gripper_aux_link" />
+			 <axis xyz="0 0 1" />
+			 <limit lower="-${PI}" upper="${PI}" effort="0" velocity="0.5" />
+        	</joint>
+        <link name="${prefix}gripper_aux_link"> 
+		</link>-->
+      
+		<joint name="${prefix}gripper_right_joint" type="prismatic"> 
+			<origin xyz="0.0202 0 0"   rpy="0 0 0" /> 
+			<parent link="${prefix}gripper_guide_link" /> 
+			<child link="${prefix}gripper_right_link" /> 
+			<axis xyz="0 1 0" /> 
+			<limit effort="1.5" velocity="6.178465545" lower="${gripper_joint_upper_limit}" upper="${gripper_joint_lower_limit}" /> 
+		</joint> 
+
+		<link name="${prefix}gripper_right_link"> 
+			<inertial>
+				<origin xyz="0 -0.025883 -0.006455" rpy="0 0 0" />
+				<mass value="0.0078621" />
+				<inertia ixx="1.332E-06" ixy="-1.5154E-21" ixz="-1.2894E-21" iyy="1.3852E-06" iyz="2.7871E-07" izz="2.1828E-06" /> 
+			</inertial>
+			<visual>  
+				<origin xyz="0 0.010 0" rpy="-1.57 -1.57 0" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Gripper_Hand_Fixed_Centered.stl" scale="0.01 0.01 0.01" />   
+				</geometry>  
+				<material name=""> 
+					<color rgba="0.25098 0.25098 0.25098 1" />   
+				</material> 
+			</visual> 
+			<collision>   
+				<origin xyz="0 0.010 0" rpy="-1.57 -1.57 0" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Gripper_Hand_Fixed_Centered.stl" scale="0.01 0.01 0.01" />   
+				</geometry> 
+			</collision> 
+		</link>
+
+		<joint name="${prefix}gripper_left_joint" type="prismatic"> 
+			<origin xyz="0.0202 0 0" rpy="0 0 0" /> 
+			<parent link="${prefix}gripper_guide_link" /> 
+			<child link="${prefix}gripper_left_link" /> 
+			<axis xyz="0 1 0" /> 
+			<limit effort="1.5" velocity="6.178465545"  lower="${-1*gripper_joint_lower_limit}" upper="${gripper_joint_upper_limit}" /> 
+			<!--mimic joint="${prefix}gripper_right_joint" multiplier="-1.0"/--> 
+		</joint> 
+		<link name="${prefix}gripper_left_link"> 
+			<inertial>
+				<origin xyz="0 -0.025883 -0.006455" rpy="0 0 0" />
+				<mass value="0.0078621" />
+				<inertia ixx="1.332E-06" ixy="-3.1416E-21" ixz="-2.193E-21" iyy="1.3852E-06" iyz="2.7871E-07" izz="2.1828E-06" /> 
+			</inertial> 
+			<visual>   
+				<origin xyz="0 -0.010 0" rpy="1.57 1.57 0" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Gripper_Hand_Fixed_Centered.stl" scale="0.01 0.01 0.01" />   
+				</geometry>  
+				<material name=""> 
+					<color rgba="0.25098 0.25098 0.25098 1" />   
+				</material> 
+			</visual> 
+			<collision>   
+				<origin xyz="0 -0.010 0" rpy="1.57 1.57 0" />   
+				<geometry> 
+					<mesh filename="package://phantomx_reactor_arm_description/meshes/Gripper_Hand_Fixed_Centered.stl" scale="0.01 0.01 0.01" />   
+				</geometry> 
+			</collision> 
+		</link> 
+		<gazebo reference="arm_base_link">
+			<selfCollide>true</selfCollide>
+		</gazebo>
+
+
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_yaw_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_pitch_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="elbow_pitch_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_pitch_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_roll_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_right_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <transmission name="tran7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_left_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor7">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+	  	<xacro:grasp_gazebo/>  
+	</xacro:macro>
+
+
+</robot>

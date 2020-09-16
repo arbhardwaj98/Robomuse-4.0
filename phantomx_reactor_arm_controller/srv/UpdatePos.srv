@@ -1,0 +1,3 @@
+sensor_msgs/JointState newState
+---
+int8 ret
