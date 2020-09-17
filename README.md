@@ -8,7 +8,7 @@ RoboMuse is a mobile robot platform. Its development started in 2009 and was ini
 
 1) Simulation of the robot in Gazebo Physics Simulator. 
 
-2) Computer vision algorithms to detect predefined object in the environment using SIFT feature matching based object detection.
+2) Computer vision algorithms to detect predefined object in the environment using SIFT feature matching based object recognition.
 
 3) Inverse Kinematics solvers to establish the cartesian control of the 5-DOF manipulator. 
 
